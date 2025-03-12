@@ -44,10 +44,10 @@ function parse_nav(n: any): void {
 }
 
 // 创建文件内容函数
-async function make_filecontent(filename: string): Promise<void> {
+async function make_filecontent(filename: string,bid:number): Promise<void> {
     const file_parse = path.parse(filename);
 
-    const res = await fetch(`${host}/api/file-mds?filters[filename][$eq]=${filename}&filters[ebook][id][$eq]=${bookid}`);
+    const res = await fetch(`${host}/api/file-mds?filters[filename][$eq]=${filename}&filters[ebook][id][$eq]=${bid}`);
     const datas = await res.json();
 
     if (datas.meta.pagination.total === 0) return;
@@ -73,10 +73,11 @@ async function bookupdate(ctx: any): Promise<void> {
     let objdata: any = "";
 
     bookid = Number(ctx.query.bookid);
+    let book;
     for (let i = 0; i < datas.data.length; i++) {
-        const data = datas.data[i];
-        if (data.id === bookid) {
-            objdata = data;
+        book = datas.data[i];
+        if (book.bookid === bookid) {
+            objdata = book;
             break;
         }
     }
@@ -118,7 +119,7 @@ async function bookupdate(ctx: any): Promise<void> {
     // 创建所有的 markdown 文件
     console.log("---------------------------");
     for (const item of filelist) {
-        await make_filecontent(item);
+        await make_filecontent(item,book.id);
     }
 
     exec(`cd ${bookpath};mkdocs build`, (err, stdout, stderr) => {
