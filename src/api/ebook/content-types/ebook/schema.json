@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ebooks",
+  "info": {
+    "singularName": "ebook",
+    "pluralName": "ebooks",
+    "displayName": "ebook",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "yml": {
+      "type": "richtext"
+    },
+    "folder": {
+      "type": "string"
+    }
+  }
+}
